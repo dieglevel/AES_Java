@@ -5,6 +5,7 @@
 package aes;
 
 import java.math.BigInteger;
+import javax.naming.spi.DirStateFactory;
 
 /**
  *
@@ -13,51 +14,303 @@ import java.math.BigInteger;
 public class aesTest {
     private String text[][];
     private String key[][];
-    private final String s_Box[][]= { {"63","7c","77","7b","f2","6b","6f","c5","30","01","67","2b","fe","d7","ab","76"},
-                                {"ca","82","c9","7d","fa","59","47","f0","ad","d4","a2","af","9c","a4","72","c0"},
-                                {"b7","fd","93","26","36","3f","f7","cc","34","a5","e5","f1","71","d8","31","15"},
-                                {"04","c7","23","c3","18","96","05","9a","07","12","80","e2","eb","27","b2","75"},
-                                {"09","83","2c","1a","1b","6e","5a","a0","52","3b","d6","b3","29","e3","2f","84"},
-                                {"53","d1","00","ed","20","fc","b1","5b","6a","cb","be","39","4a","4c","58","cf"},
-                                {"d0","ef","aa","fb","43","4d","33","85","45","f9","02","7f","50","3c","9f","a8"},
-                                {"51","a3","40","8f","92","9d","38","f5","bc","b6","da","21","10","ff","f3","d2"},
-                                {"cd","0c","13","ec","5f","97","44","17","c4","a7","7e","3d","64","5d","19","73"},
-                                {"60","81","4f","dc","22","2a","90","88","46","ee","b8","14","de","5e","0b","db"},
-                                {"e0","32","3a","0a","49","06","24","5c","c2","d3","ac","62","91","95","e4","79"},
-                                {"e7","c8","37","6d","8d","d5","4e","a9","6c","56","f4","ea","65","7a","ae","08"},
-                                {"ba","78","25","2e","1c","a6","b4","c6","e8","dd","74","1f","4b","bd","8b","8a"},
-                                {"70","3e","b5","66","48","03","f6","0e","61","35","57","b9","86","c1","1d","9e"},
-                                {"e1","f8","98","11","69","d9","8e","94","9b","1e","87","e9","ce","55","28","df"},
-                                {"8c","a1","89","0d","bf","e6","42","68","41","99","2d","0f","b0","54","bb","16"}
+    private final String s_Box[][]= {   {"63", "7C", "77", "7B", "F2", "6B", "6F", "C5", "30", "01", "67", "2B", "FE", "D7", "AB", "76"},
+                                        {"CA", "82", "C9", "7D", "FA", "59", "47", "F0", "AD", "D4", "A2", "AF", "9C", "A4", "72", "C0"},
+                                        {"B7", "FD", "93", "26", "36", "3F", "F7", "CC", "34", "A5", "E5", "F1", "71", "D8", "31", "15"},
+                                        {"04", "C7", "23", "C3", "18", "96", "05", "9A", "07", "12", "80", "E2", "EB", "27", "B2", "75"},
+                                        {"09", "83", "2C", "1A", "1B", "6E", "5A", "A0", "52", "3B", "D6", "B3", "29", "E3", "2F", "84"},
+                                        {"53", "D1", "00", "ED", "20", "FC", "B1", "5B", "6A", "CB", "BE", "39", "4A", "4C", "58", "CF"},
+                                        {"D0", "EF", "AA", "FB", "43", "4D", "33", "85", "45", "F9", "02", "7F", "50", "3C", "9F", "A8"},
+                                        {"51", "A3", "40", "8F", "92", "9D", "38", "F5", "BC", "B6", "DA", "21", "10", "FF", "F3", "D2"},
+                                        {"CD", "0C", "13", "EC", "5F", "97", "44", "17", "C4", "A7", "7E", "3D", "64", "5D", "19", "73"},
+                                        {"60", "81", "4F", "DC", "22", "2A", "90", "88", "46", "EE", "B8", "14", "DE", "5E", "0B", "DB"},
+                                        {"E0", "32", "3A", "0A", "49", "06", "24", "5C", "C2", "D3", "AC", "62", "91", "95", "E4", "79"},
+                                        {"E7", "C8", "37", "6D", "8D", "D5", "4E", "A9", "6C", "56", "F4", "EA", "65", "7A", "AE", "08"},
+                                        {"BA", "78", "25", "2E", "1C", "A6", "B4", "C6", "E8", "DD", "74", "1F", "4B", "BD", "8B", "8A"},
+                                        {"70", "3E", "B5", "66", "48", "03", "F6", "0E", "61", "35", "57", "B9", "86", "C1", "1D", "9E"},
+                                        {"E1", "F8", "98", "11", "69", "D9", "8E", "94", "9B", "1E", "87", "E9", "CE", "55", "28", "DF"},
+                                        {"8C", "A1", "89", "0D", "BF", "E6", "42", "68", "41", "99", "2D", "0F", "B0", "54", "BB", "16"}
                                 };
     
-    private final String round_gW[][] = {{"01","00","00","00"},
-                                  {"02","00","00","00"},
-                                  {"04","00","00","00"},
-                                  {"08","00","00","00"},
-                                  {"10","00","00","00"},
-                                  {"20","00","00","00"},
-                                  {"40","00","00","00"},
-                                  {"80","00","00","00"},
-                                  {"1b","00","00","00"},
-                                  {"36","00","00","00"},};
+    private final String invSBox[][]= { {"52", "09", "6A", "D5", "30", "36", "A5", "38", "BF", "40", "A3", "9E", "81", "F3", "D7", "FB"},
+                                        {"7C", "E3", "39", "82", "9B", "2F", "FF", "87", "34", "8E", "43", "44", "C4", "DE", "E9", "CB"},
+                                        {"54", "7B", "94", "32", "A6", "C2", "23", "3D", "EE", "4C", "95", "0B", "42", "FA", "C3", "4E"},
+                                        {"08", "2E", "A1", "66", "28", "D9", "24", "B2", "76", "5B", "A2", "49", "6D", "8B", "D1", "25"},
+                                        {"72", "F8", "F6", "64", "86", "68", "98", "16", "D4", "A4", "5C", "CC", "5D", "65", "B6", "92"},
+                                        {"6C", "70", "48", "50", "FD", "ED", "B9", "DA", "5E", "15", "46", "57", "A7", "8D", "9D", "84"},
+                                        {"90", "D8", "AB", "00", "8C", "BC", "D3", "0A", "F7", "E4", "58", "05", "B8", "B3", "45", "06"},
+                                        {"D0", "2C", "1E", "8F", "CA", "3F", "0F", "02", "C1", "AF", "BD", "03", "01", "13", "8A", "6B"},
+                                        {"3A", "91", "11", "41", "4F", "67", "DC", "EA", "97", "F2", "CF", "CE", "F0", "B4", "E6", "73"},
+                                        {"96", "AC", "74", "22", "E7", "AD", "35", "85", "E2", "F9", "37", "E8", "1C", "75", "DF", "6E"},
+                                        {"47", "F1", "1A", "71", "1D", "29", "C5", "89", "6F", "B7", "62", "0E", "AA", "18", "BE", "1B"},
+                                        {"FC", "56", "3E", "4B", "C6", "D2", "79", "20", "9A", "DB", "C0", "FE", "78", "CD", "5A", "F4"},
+                                        {"1F", "DD", "A8", "33", "88", "07", "C7", "31", "B1", "12", "10", "59", "27", "80", "EC", "5F"},
+                                        {"60", "51", "7F", "A9", "19", "B5", "4A", "0D", "2D", "E5", "7A", "9F", "93", "C9", "9C", "EF"},
+                                        {"A0", "E0", "3B", "4D", "AE", "2A", "F5", "B0", "C8", "EB", "BB", "3C", "83", "53", "99", "61"},
+                                        {"17", "2B", "04", "7E", "BA", "77", "D6", "26", "E1", "69", "14", "63", "55", "21", "0C", "7D"},
+                                };
+    
+    private final String rcon[][] =    {{"01","00","00","00"},
+                                        {"02","00","00","00"},
+                                        {"04","00","00","00"},
+                                        {"08","00","00","00"},
+                                        {"10","00","00","00"},
+                                        {"20","00","00","00"},
+                                        {"40","00","00","00"},
+                                        {"80","00","00","00"},
+                                        {"1B","00","00","00"},
+                                        {"36","00","00","00"},};
     
     private final String boxMixColumn[][] ={{"02", "03", "01", "01"}, 
                                             {"01", "02", "03", "01"},
                                             {"01", "01", "02", "03"},
                                             {"03", "01", "01", "02"}};
     
+    private final String[][] invBoxMixColumn = {{"0E", "0B", "0D", "09"}, 
+                                                {"09", "0E", "0B", "0D"},
+                                                {"0D", "09", "0E", "0B"},
+                                                {"0B", "0D", "09", "0E"}};
+    
+//    private final String[][] invBoxMixColumn = {{"0E", "09", "0D", "0B"}, 
+//                                                {"0B", "0E", "09", "0D"},
+//                                                {"0D", "0B", "0E", "09"},
+//                                                {"09", "0D", "0B", "0E"}};
+    
+    private String[][] cipherText = new String[4][4];
+    
+    private String[][][] roundKeyData = new String[11][4][4];
     
     //Contrucster
-    public aesTest(String[][] text, String[][] key){
-        this.text = text;
-        this.key = key;
+    public aesTest(String text, String key){
+        this.text = inputToHex(text.toUpperCase());
+        this.key = inputToHex(key.toUpperCase());
+        System.out.println("");
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                System.out.print(this.text[i][j] + " ");
+            }
+        }
+        System.out.println("");
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                System.out.print(this.key[i][j] + " ");
+            }
+        }
+        
+        System.out.println("");
+        
+        
     }
+     public aesTest(){
+
+     }
+     
+
     
     //Getter
     public String[][] getText(){
         return text;
     }
+//    -----------------------------------------------------------------  Full Main
+    public String maHoa(){
+        roundKey(this.key);
+        String result ="";
+        
+        String[][] first = addRoundKey(text, getRoundKey(0));
+        
+        
+        
+//        System.out.println("ADDROUND 0: -------------");
+//        showResult2(first);
+//        
+//        String[][] resultTemp = new String[4][4];
+//        
+//        resultTemp =  substitutionBytes(first);
+//        System.out.println("SUBSTITU 0: -------------");
+//        showResult2(resultTemp);
+//        // 10Round
+//        for (int i = 0; i < 9; i++) {
+//            
+//            resultTemp = shiftRow(resultTemp);
+//            System.out.println("SHIFTROW"+i+": -------------");
+//            showResult2(resultTemp);
+//            
+//            resultTemp = mixColumn(resultTemp);
+//            System.out.println("MIXCLOUMN"+i+": -------------");
+//            showResult2(resultTemp);
+//
+//            resultTemp = addRoundKey(getRoundKey(i+1), resultTemp);
+//            System.out.println("ADDROUNDKEY"+(i+1)+": -------------");
+//            showResult2(resultTemp);
+//
+//            resultTemp =  substitutionBytes(resultTemp);
+//            System.out.println("SUBSTITU"+i+": -------------");
+//            showResult2(resultTemp);
+//        }
+//        // Bước cuối
+//            resultTemp = shiftRow(resultTemp);
+//            System.out.println("SHIFTROW 10: -------------");
+//            showResult2(resultTemp);
+//                    
+//            resultTemp = addRoundKey(getRoundKey(10), resultTemp);
+//            System.out.println("ADDROUND 10: -------------");
+//            showResult2(resultTemp);
+//        
+        
+        String[][] resultTemp = new String[4][4];
+        
+        resultTemp =  substitutionBytes(first);
+
+        // 10Round
+        for (int i = 0; i < 9; i++) {
+            resultTemp = shiftRow(resultTemp);
+            resultTemp = mixColumn(resultTemp);
+            resultTemp = addRoundKey(getRoundKey(i+1), resultTemp);
+            resultTemp =  substitutionBytes(resultTemp);
+        }
+        // Bước cuối
+            resultTemp = shiftRow(resultTemp);    
+            resultTemp = addRoundKey(getRoundKey(10), resultTemp);
+        
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    result += resultTemp[j][i];
+                }
+        }
+
+        
+        return result;
+    }
+//    -----------------------------------------------------------------  Full Main
+    
+    public String[][] getRoundKey(int keyNum){
+        String[][] result = new String[4][4];
+        
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                result[i][j] = this.roundKeyData[keyNum][i][j];
+            }
+        }
+        return result;
+    }
+    
+//    -----------------------------------------------------------------  Round key     
+    
+    public String[][] roundKey(String[][] key){
+        
+        
+        String[][] result = new String[4][4];
+        
+            for (int j = 0; j < 4; j++) {
+                    for (int k = 0; k < 4; k++) {
+                        roundKeyData[0][j][k] = key[j][k];
+                    }
+                }
+        result = key;
+        for (int i = 0; i < 10; i++) {
+            result = roundKeyGenerate(result, i);
+            for (int j = 0; j < 4; j++) {
+                for (int k = 0; k < 4; k++) {
+                    roundKeyData[i+1][j][k] = result[j][k];
+                }
+            }
+        }
+        return result;
+    }
+    
+    //Kết quả của 1 key
+    
+    public String[][] roundKeyGenerate(String[][] input, int roundNumber){
+        //Clone Data
+                String[][] clone = input.clone();
+                for (int i = 0; i < input.length; i++) {
+                    clone[i]= input[i].clone();
+                }
+        // Xử lý Đầu tiên
+                String result[][] = new String[4][4];
+                String[] temp = leftShiftColumn(getColumn(input, 3));
+                for (int i = 0; i < 4; i++) {
+                    temp[i] = checkSBox(temp[i]);
+                }
+                temp = xorHexHexHex(getColumn(input, 0), temp, getRow(rcon, roundNumber));
+        //Nhét vào kết quả
+                for (int i = 0; i < 4; i++) {
+                    result [i][0] = temp[i];
+        }
+        // Xử lý 3 tk sau
+                for (int i = 1; i < 4; i++) {
+                    for (int j = 0; j < 4; j++) {
+                        String[] valueColumn = getColumn(clone, i);
+                        result[j][i] = xorHexHex(result[j][i-1], valueColumn[j]);
+                    }
+        }
+        //Trả
+        return result;
+    }
+    
+    public String[] getColumn (String[][] input, int column){
+        //Clone Data 
+                String[][] clone = input.clone();
+                for (int i = 0; i < input.length; i++) {
+                    clone[i]= input[i].clone();
+                }
+        // Xử lý
+                String result[] = new String[4];
+                for (int i = 0 ; i < 4; i++){
+                    result[i] = clone[i][column];
+                }
+        // Trả
+        return result;
+    }
+    
+    public String[] getRow (String[][] input, int row){
+        //Clone Data 
+                String[][] clone = input.clone();
+                for (int i = 0; i < input.length; i++) {
+                    clone[i]= input[i].clone();
+                }
+        // Xử lý
+                String result[] = new String[4];
+                for (int i = 0 ; i < 4; i++){
+                    result[i] = clone[row][i];
+                }
+        // Trả
+        return result;
+    }
+    
+    public String[] xorHexHexHex(String[] input, String[] resultAfterSBox, String[] rcon){
+        // Clone Data
+        String cloneInput[] = input.clone();
+        String cloneResultAfterSBox[] =  resultAfterSBox.clone();
+        String cloneRcon[] = rcon.clone();
+
+        // Xử lý
+        String result[] = new String[4];
+        for (int i = 0; i < 4; i++) {
+            int n1 = Integer.parseInt(cloneInput[i], 16);
+            int n2 = Integer.parseInt(cloneResultAfterSBox[i], 16);
+            int n3 = Integer.parseInt(cloneRcon[i], 16);
+            result[i] =  String.format("%02x", n1 ^ n2 ^ n3).toUpperCase();
+        }
+        return result;
+    }
+    
+    public String[] leftShiftColumn(String[] input){
+        //Clone Data 
+                String[] clone = input.clone();
+        // Xử lý
+        
+                String[] temp = clone.clone();
+                String[] result = new String[4];
+                result[0] = temp[1];
+                result[1] = temp[2];
+                result[2] = temp[3];
+                result[3] = temp[0];
+        // Trả
+
+        return result;
+    }
+     
 //    -----------------------------------------------------------------  Shift Row
     public String[][] shiftRow(String input[][]){
         //Clone Data 
@@ -116,7 +369,6 @@ public class aesTest {
 
     // Trả
             //Show Result
-            showResult(result);
             return result;  
     }
     
@@ -136,10 +388,7 @@ public class aesTest {
                 resultTemp[i] = temp[i];
             }
                 
-        }
-            for (int i = 0; i < 4; i++) {
-            }
-            
+        }   
             int n1 = Integer.parseInt(resultTemp[0], 16);
             int n2 = Integer.parseInt(resultTemp[1], 16);
             int n3 = Integer.parseInt(resultTemp[2], 16);
@@ -160,7 +409,7 @@ public class aesTest {
             shiftedLeft = shiftedLeft ^ 0x11b;
         }
         shiftedLeft &= 0xFF;
-        return String.format("%06x", shiftedLeft);
+        return String.format("%02x", shiftedLeft);
     }
     // Xử lý nhân 3
     public String nhan3(String hexString){
@@ -170,15 +419,98 @@ public class aesTest {
         
         int shiftedLeft = input ^ nhan2_output;
         shiftedLeft &= 0xFF;
-        return String.format("%06x", shiftedLeft);
+        return String.format("%02x", shiftedLeft);
     }
     
-  
+//    -----------------------------------------------------------------   Substitution Bytes (S-Box)
     
+    public String[][] substitutionBytes(String[][] input){
+        //Clone Data 
+        String[][] clone = input.clone();
+        for (int i = 0; i < input.length; i++) {
+            clone[i]= input[i].clone();
+        }
+        String[][] result = new String[4][4];
+        // Xử lý
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                result[i][j] = checkSBox(clone[i][j]);
+            }
+        }
+        //Trả
+        return result;
+    }
        
+    public String checkSBox(String input){
+        int x = Integer.parseInt(String.valueOf(input.charAt(0)), 16);
+        int y = Integer.parseInt(String.valueOf(input.charAt(1)), 16);
+        
+        
+        return s_Box[x][y].toUpperCase();
+    }
+    
+//    -----------------------------------------------------------------   Add roundkey
+    
+    public String[][] addRoundKey (String[][] input, String[][] key){
+    // Clone Data
+        String[][] cloneInput = input.clone();
+        String[][] cloneKey = key.clone();
+        for (int i = 0; i < input.length; i++) {
+            cloneInput[i]= input[i].clone();
+            cloneKey[i]= key[i].clone();
+        }
+    // Xử lý
+        String[][] result = new String[4][4];
+    
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                result[i][j] = xorHexHex(cloneInput[i][j], cloneKey[i][j]);
+            }
+        }
+    // Trả
+        return result;
+    }
+    
+    public String xorHexHex(String a, String b){
+        int n1 = Integer.parseInt(a, 16);
+        int n2 = Integer.parseInt(b, 16);
+        int n3 = n1 ^ n2;
+        return  String.format("%02x", n3).toUpperCase();
+    }
+//    -----------------------------------------------------------------   Input to Hex   
+    
+    public String[][] inputToHex(String input){
+        String[][] result = new String[4][4];
+        int temp = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+//                System.out.println(input.charAt(temp));
+                result[i][j] = textToHex(String.valueOf(input.charAt(temp++))).toUpperCase();
+                                
+            }
+        }
+//        System.out.println("NEXT______");
+        return result;
+    }
+    
+        public String[][] inputToHex2(String input){
+        String[][] result = new String[4][4];
+        int temp = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                result[j][i] = textToHex(String.valueOf(input.charAt(temp++))).toUpperCase();
+            }
+        }
+        return result;
+    }
+    
 //    -----------------------------------------------------------------   Xử lý khác
     public String hexToBin(String s) {
               return new BigInteger(s, 16).toString(2);
+    }
+    
+    public String textToHex (String input){
+        return String.format("%2X", new BigInteger(1, input.getBytes()));
     }
 
     public byte[][] changeInputToByte(String input[][]){
@@ -203,7 +535,20 @@ public class aesTest {
     
     }
     
-    public void showResult (String[][] input){
+    public void showResult3 (String[][][] input){
+            for (int i = 0; i < 11; i++) {
+                for (int j = 0; j < 4; j++) {
+                    for (int k = 0; k < 4; k++) {
+                        System.out.print(input[i][j][k]+ " ");
+                    }
+                System.out.println("");
+                }
+
+                System.out.println("");
+            }
+    }
+    
+    public void showResult2 (String[][] input){
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
                     System.out.print(input[i][j]+ " ");
@@ -212,10 +557,370 @@ public class aesTest {
             }
     }
     
-        public void showResult2 (String[] input){
+    public void showResult1 (String[] input){
             for (int i = 0; i < 4; i++) {
                     System.out.print(input[i]+ " ");
                 System.out.println("");
             }
+    }
+    
+     public void showResult (String input){
+            for (int i = 0; i < 16; i++) {
+                    System.out.print(input+ " ");
+            }
+    }
+     
+     
+//    -----------------------------------------------------------------   Giải mã   
+     
+     public String giaiMa(String input, String key_input){
+        String[][] temp = new String[4][4];
+        temp = inputText(input);
+                roundKey(this.key);
+        String result ="";
+        String[][] first = addRoundKey(temp, getRoundKey(10));
+        String[][] resultTemp = new String[4][4];
+        resultTemp = first;
+        
+//         System.out.println("---Add Round 10 ---");
+//         showResult2(resultTemp);
+//        // 9 8 7 6 5 4 3 2 1 
+//        for (int i = 9; i > 0 ;i--){
+//            resultTemp = invShiftRow(resultTemp);
+//                System.out.println("---INV Shift ROW " + i + "---");
+//                showResult2(resultTemp);
+//            resultTemp = invSubstitutionBytes(resultTemp);
+//                System.out.println("---INV SUB Byte " + i + "---");
+//                showResult2(resultTemp);
+//            resultTemp = addRoundKey(resultTemp, getRoundKey(i));
+//                System.out.println("---INV ADD ROW " + i + "---");
+//                showResult2(resultTemp);
+//            resultTemp = invMixColumn(resultTemp);
+//                System.out.println("---INV Mix Colum " + i + "---");
+//                showResult2(resultTemp);
+//        }
+//        
+//        
+//        //Bước cuối 
+//        resultTemp = invShiftRow(resultTemp);
+//                System.out.println("---INV Shift Colum " + 0 + "---");
+//                showResult2(resultTemp);
+//        resultTemp = invSubstitutionBytes(resultTemp);
+//                System.out.println("---INV SUB BYTE " + 0 + "---");
+//                showResult2(resultTemp);
+//        resultTemp = addRoundKey(resultTemp, getRoundKey(0));
+//                System.out.println("---INV ADD ROUND " + 0 + "---");
+//                showResult2(resultTemp);
+//                
+
+        // 9 8 7 6 5 4 3 2 1 
+        for (int i = 9; i > 0 ;i--){
+            resultTemp = invShiftRow(resultTemp);
+
+            resultTemp = invSubstitutionBytes(resultTemp);
+
+            resultTemp = addRoundKey(resultTemp, getRoundKey(i));
+
+            resultTemp = invMixColumn(resultTemp);
+
+        }
+        
+        resultTemp = invShiftRow(resultTemp);
+
+        resultTemp = invSubstitutionBytes(resultTemp);
+
+        resultTemp = addRoundKey(resultTemp, getRoundKey(0));
+  
+                
+                
+                
+                
+        for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    result += resultTemp[i][j];
+                }
+        }
+        
+        byte[] byteArray = new byte[result.length() / 2];
+        for (int i = 0; i < result.length(); i += 2) {
+            byteArray[i / 2] = (byte) Integer.parseInt(result.substring(i, i + 2), 16);
+        }
+        // Chuyển mảng bytes thành văn bản
+        String text = new String(byteArray);
+        return text;
+     }
+     
+     
+     
+     
+     
+     public String[][] inputText(String input){
+         String[][] result = new String[4][4];
+         
+         int count = 0;
+         for (int i = 0; i < 4; i++) {
+             for (int j = 0; j < 4; j++) {
+                 result[j][i] = String.valueOf(input.substring(count++, count+1));
+                 count++;
+             }
+         }
+         
+         return result;
+     }
+     
+     
+     
+//    -----------------------------------------------------------------   Ivn SubStitution    
+    public String[][] invSubstitutionBytes(String[][] input){
+        //Clone Data 
+        String[][] clone = input.clone();
+        for (int i = 0; i < input.length; i++) {
+            clone[i]= input[i].clone();
+        }
+        String[][] result = new String[4][4];
+        // Xử lý
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                result[i][j] = invCheckSBox(clone[i][j]);
+            }
+        }
+        //Trả
+        return result;
+    }
+    
+        public String invCheckSBox(String input){
+            int x = Integer.parseInt(String.valueOf(input.charAt(0)), 16);
+            int y = Integer.parseInt(String.valueOf(input.charAt(1)), 16);
+        return invSBox[x][y].toUpperCase();
+    }
+        
+//    ----------------------------------------------------------------- Inv Shift Row
+    public String[][] invShiftRow(String input[][]){
+        //Clone Data 
+                String[][] result = input.clone();
+                for (int i = 0; i < input.length; i++) {
+                    result[i]= input[i].clone();
+                }
+
+        //Xử lý shiftRow
+                int right = 0;
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 4; j++) {
+                        
+                        if (right == 4){
+                            right = 0;
+                        }
+                        result [i][j] = input[i][right];
+                        if (j != 3 ){
+                            right++;
+                        }
+                    }
+                }
+        // Trả
+            return result;  
+    }
+//    ----------------------------------------------------------------- Inv Mix Column
+    public String[][] invMixColumn(String[][] input){
+    //Clone Data 
+        String[][] clone = input.clone();
+        String[][] box = invBoxMixColumn.clone();
+        for (int i = 0; i < input.length; i++) {
+            clone[i]= input[i].clone();
+            box[i]= invBoxMixColumn[i].clone();
+        }
+    //Xử lý 
+        String[][] result = new String[4][4];
+        
+        for (int i = 0; i < 4; i++) {
+                    String[] row = new String[4];
+                    String[] column = new String[4];
+                    //Clone column 
+                        for (int j = 0; j < 4; j++) {
+                            column[j]= clone[j][i];
+                        }         
+            for (int j = 0; j < 4; j++) {
+                    //Clone Row
+                        for (int k = 0; k < 4; k++) {
+                            row[k]= box[j][k];
+                        }
+                result[j][i] = invMix1Result(column, row);
+                // Thêm Số 0 vào bên trái
+                if (result[j][i].length() == 1){
+                    result[j][i] ="0"+ result[j][i];
+                }
+            }
+        }
+
+    // Trả
+            //Show Result
+            return result;  
+    }
+    
+    
+        public String invMix1Result (String[] temp, String[] boxMix){
+        String[] resultTemp = new String[4];
+        
+        for (int i = 0; i < 4; i++) {
+            if (boxMix[i] == "0E"){
+                resultTemp[i] = nhanE(temp[i]);
+            }
+            else if (boxMix[i] == "0D"){
+                resultTemp[i] = nhanD(temp[i]);
+            }
+            else if (boxMix[i] == "09"){
+                resultTemp[i] = nhan9(temp[i]);
+            }
+            else if (boxMix[i] == "0B"){
+                resultTemp[i] = nhanB(temp[i]);
+            }
+                
+        }
+        
+            
+        
+            int n1 = Integer.parseInt(resultTemp[0], 16);
+            int n2 = Integer.parseInt(resultTemp[1], 16);
+            int n3 = Integer.parseInt(resultTemp[2], 16);
+            int n4 = Integer.parseInt(resultTemp[3], 16);
+            
+            int result = n1 ^ n2 ^ n3 ^ n4;
+            return Integer.toHexString(result).toUpperCase();
+        
+    }
+    
+        public String nhan9(String hexString){
+            int value = (Integer.parseInt(hexString, 16));
+            int input = (value << 3) ^ value;
+            if (input > (256<<2)) input = input ^ (0x11b << 2);
+            if (input > (256<<1)) input = input ^ (0x11b << 1);
+            if (input > 256) input = input ^ 0x11b;
+            input &= 0xFF;
+//            System.out.println("Nhan9 :"+String.format("%06x", input));
+            return String.format("%02X", input).toUpperCase();
+        }
+        
+        public String nhanB(String hexString){
+            int value = (Integer.parseInt(hexString, 16));
+            int input = (value << 3) ^ (value << 1) ^ value;
+            if (input > (256<<2)) input = input ^ (0x11b << 2);
+            if (input > (256<<1)) input = input ^ (0x11b << 1);
+            if (input > 256) input = input ^ 0x11b;
+            input &= 0xFF;
+//            System.out.println("NhanB :"+String.format("%06x", input));
+            return String.format("%02X", input).toUpperCase();
+        }
+        
+        public String nhanD(String hexString){
+            int value = (Integer.parseInt(hexString, 16));
+            int input = (value << 3) ^ (value << 2) ^ value;
+            if (input >= (256<<2)) input = input ^ (0x11b << 2);
+            if (input >= (256<<1)) input = input ^ (0x11b << 1);
+            if (input >= 256) input = input ^ 0x11b;
+            input &= 0xFF;
+//            System.out.println("NhanD :"+String.format("%06x", input));
+            return String.format("%02X", input).toUpperCase();
+        }
+        
+        public String nhanE(String hexString){
+            int value = (Integer.parseInt(hexString, 16));
+            int input = (value << 3) ^ (value << 2) ^ (value << 1);
+            if (input >= (256<<2)) input = input ^ (0x11b << 2);
+            if (input >= (256<<1)) input = input ^ (0x11b << 1);
+            if (input >= 256) input = input ^ 0x11b;
+            input &= 0xFF;
+//            System.out.println("NhanE :"+String.format("%06x", input));
+            return String.format("%02X", input).toUpperCase();
+        }
+        
+        public String[][] textHexToArray(String input){
+            String[] temp = new String[16];
+            String[][] result = new String[4][4];
+            int flag = 0;
+            for (int i = 0; i < 32; i++) {
+                temp[flag] = input.substring(i, i+2);
+                flag++;
+                i++;
+            }
+            flag = 0;
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    result[j][i] = temp[flag];
+                    flag++;
+                }
+            }
+            return result;
+        }
+        
+        
+        
+        public String hexToText(String input){
+            String result = "";
+            
+            String[] temp = new String[16];
+
+            int flag = 0;
+            for (int i = 0; i < 32; i++) {
+                temp[flag] = input.substring(i, i+2);
+                flag++;
+                i++;
+            }
+            
+            flag = 0;
+            for (int j = 0; j < 16; j++) {
+                    result = temp[flag];
+                    flag++;
+                }
+            
+            return result;
+        }
+        
+    public int multiply (int a, int b){
+        int poly = 0b100011011;
+        int result = 0;
+
+        while (b>0){
+            if (b%2 == 1)
+                result ^= a;
+            a = gmul(a, poly);
+            b >>= 1;
+        }
+
+        return result;
+    }
+
+    public int gmul (int a, int p){
+        a <<= 1;
+        if ((a&0x100) == 0x100)
+            a ^= p;
+        return (a&0xff);
+    }
+     public String[][] invMixColumn2 (String[][] input) {
+        int[][] afterAddroundKey = new int[4][4];
+        
+         for (int i = 0; i < 4; i++) {
+             for (int j = 0; j < 4; j++) {
+                 afterAddroundKey[i][j] = Integer.parseInt(input[i][j], 16); 
+             }
+         }
+         
+        int[][] result = new int[4][4];
+        
+        
+        for (int i=0;i<4;i++) {
+            result[0][i] = multiply(0xe, afterAddroundKey[0][i]) ^ multiply(0xb, afterAddroundKey[1][i]) ^ multiply(0xd, afterAddroundKey[2][i]) ^ multiply(0x9, afterAddroundKey[3][i]);
+            result[1][i] = multiply(0x9, afterAddroundKey[0][i]) ^ multiply(0xe, afterAddroundKey[1][i]) ^ multiply(0xb, afterAddroundKey[2][i]) ^ multiply(0xd, afterAddroundKey[3][i]);
+            result[2][i] = multiply(0xd, afterAddroundKey[0][i]) ^ multiply(0x9, afterAddroundKey[1][i]) ^ multiply(0xe, afterAddroundKey[2][i]) ^ multiply(0xb, afterAddroundKey[3][i]);
+            result[3][i] = multiply(0xb, afterAddroundKey[0][i]) ^ multiply(0xd, afterAddroundKey[1][i]) ^ multiply(0x9, afterAddroundKey[2][i]) ^ multiply(0xe, afterAddroundKey[3][i]);
+        }
+        
+        String[][] resultString = new String[4][4];
+        
+        for (int i = 0; i < 4; i++) {
+             for (int j = 0; j < 4; j++) {
+                 resultString[i][j] = String.format("%02X", result[i][j]).toUpperCase();
+             }
+         }
+        
+        return resultString;
     }
 }

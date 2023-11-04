@@ -13,19 +13,45 @@ import java.math.BigInteger;
 public class chay {
     
     public static void main(String[] args) {
-        String text[][] =      {{"63", "EB", "9F", "A0"}, 
-                                {"2F", "93", "92", "C0"},
-                                {"AF", "C7", "AB", "30"},
-                                {"A2", "20", "CB", "2B"}};
+        String key =  "HDSDOIWHDOIWQDWQ"; 
+        String text = "NGUYENTANLOCDEPL";
         
-        String key[][] = {{}};
+        String key2 = "ZVLKVNWVIUSDHOAP";
+        String text2 ="NGUYENTANLOCVAIL";
+        
+        String a,b;
         //Khai báo class
-        aesTest aes = new aesTest(text.clone(),key);
+//        aesTest aes = new aesTest(text.clone(),key);
 
-        aes.mixColumn(text);
-
+                  String boxMixColumn[][] ={{"02", "03", "01", "01"}, 
+                                            {"01", "02", "03", "01"},
+                                            {"01", "01", "02", "03"},
+                                            {"03", "01", "01", "02"}};
+                  
+                 String[][] temp = {{"47", "40", "A3", "4C"},
+                                    {"37", "D4", "70", "9F"},
+                                    {"94", "E4", "3A", "42"},
+                                    {"ED", "A5", "A6", "BC"}
+                 };
+//        aesTest aes = new aesTest(text,key);  
+//        a = aes.maHoa();
+//        System.out.println("Cipher: " + a);
+//        b = aes.giaiMa(a);
+//        System.out.println("text: " + b);
+//        
+//////
+        aesTest aes2 = new aesTest(text2,key2);  
+        a = aes2.maHoa();
+        System.out.println("Cipher: " + a);
+        b = aes2.giaiMa(a, key2);
+        System.out.println("text: " + b);
         
-
+//        String[][] result = new String[4][4];
+//
+//        
+//        aes2.showResult2(aes2.inputText("7D4CFC545180E2B817A57CCF73EAD765"));
+//        
+       
         // Result
        
     }
