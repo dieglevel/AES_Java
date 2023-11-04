@@ -16,8 +16,8 @@ public class chay {
         String key =  "HDSDOIWHDOIWQDWQ"; 
         String text = "NGUYENTANLOCDEPL";
         
-        String key2 = "ZVLKVNWVIUSDHOAP";
-        String text2 ="NGUYENTANLOCVAIL";
+        String key2 = "ngaythi1105";
+        String text2 ="21046541";
         
         String a,b;
         //Khai báo class
@@ -36,7 +36,7 @@ public class chay {
 //        aesTest aes = new aesTest(text,key);  
 //        a = aes.maHoa();
 //        System.out.println("Cipher: " + a);
-//        b = aes.giaiMa(a);
+//        b = aes.giaiMa(a, key);
 //        System.out.println("text: " + b);
 //        
 //////

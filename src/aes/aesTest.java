@@ -82,8 +82,8 @@ public class aesTest {
     
     //Contrucster
     public aesTest(String text, String key){
-        this.text = inputToHex(text.toUpperCase());
-        this.key = inputToHex(key.toUpperCase());
+        this.text = inputToHex(text);
+        this.key = inputToHex(key);
         System.out.println("");
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -119,7 +119,7 @@ public class aesTest {
         String[][] first = addRoundKey(text, getRoundKey(0));
         
         
-        
+//        
 //        System.out.println("ADDROUND 0: -------------");
 //        showResult2(first);
 //        
@@ -135,7 +135,7 @@ public class aesTest {
 //            System.out.println("SHIFTROW"+i+": -------------");
 //            showResult2(resultTemp);
 //            
-//            resultTemp = mixColumn(resultTemp);
+//            resultTemp = mixColumns(resultTemp);
 //            System.out.println("MIXCLOUMN"+i+": -------------");
 //            showResult2(resultTemp);
 //
@@ -155,7 +155,7 @@ public class aesTest {
 //            resultTemp = addRoundKey(getRoundKey(10), resultTemp);
 //            System.out.println("ADDROUND 10: -------------");
 //            showResult2(resultTemp);
-//        
+        
         
         String[][] resultTemp = new String[4][4];
         
@@ -164,14 +164,14 @@ public class aesTest {
         // 10Round
         for (int i = 0; i < 9; i++) {
             resultTemp = shiftRow(resultTemp);
-            resultTemp = mixColumn(resultTemp);
+            resultTemp = mixColumns(resultTemp);
             resultTemp = addRoundKey(getRoundKey(i+1), resultTemp);
             resultTemp =  substitutionBytes(resultTemp);
         }
         // Bước cuối
             resultTemp = shiftRow(resultTemp);    
             resultTemp = addRoundKey(getRoundKey(10), resultTemp);
-        
+//        
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
                     result += resultTemp[j][i];
@@ -183,7 +183,7 @@ public class aesTest {
     }
 //    -----------------------------------------------------------------  Full Main
     
-    public String[][] getRoundKey(int keyNum){
+    private String[][] getRoundKey(int keyNum){
         String[][] result = new String[4][4];
         
         for (int i = 0; i < 4; i++) {
@@ -196,7 +196,7 @@ public class aesTest {
     
 //    -----------------------------------------------------------------  Round key     
     
-    public String[][] roundKey(String[][] key){
+    private String[][] roundKey(String[][] key){
         
         
         String[][] result = new String[4][4];
@@ -220,7 +220,7 @@ public class aesTest {
     
     //Kết quả của 1 key
     
-    public String[][] roundKeyGenerate(String[][] input, int roundNumber){
+    private String[][] roundKeyGenerate(String[][] input, int roundNumber){
         //Clone Data
                 String[][] clone = input.clone();
                 for (int i = 0; i < input.length; i++) {
@@ -248,7 +248,7 @@ public class aesTest {
         return result;
     }
     
-    public String[] getColumn (String[][] input, int column){
+    private String[] getColumn (String[][] input, int column){
         //Clone Data 
                 String[][] clone = input.clone();
                 for (int i = 0; i < input.length; i++) {
@@ -263,7 +263,7 @@ public class aesTest {
         return result;
     }
     
-    public String[] getRow (String[][] input, int row){
+    private String[] getRow (String[][] input, int row){
         //Clone Data 
                 String[][] clone = input.clone();
                 for (int i = 0; i < input.length; i++) {
@@ -278,7 +278,7 @@ public class aesTest {
         return result;
     }
     
-    public String[] xorHexHexHex(String[] input, String[] resultAfterSBox, String[] rcon){
+    private String[] xorHexHexHex(String[] input, String[] resultAfterSBox, String[] rcon){
         // Clone Data
         String cloneInput[] = input.clone();
         String cloneResultAfterSBox[] =  resultAfterSBox.clone();
@@ -295,7 +295,7 @@ public class aesTest {
         return result;
     }
     
-    public String[] leftShiftColumn(String[] input){
+    private String[] leftShiftColumn(String[] input){
         //Clone Data 
                 String[] clone = input.clone();
         // Xử lý
@@ -312,7 +312,7 @@ public class aesTest {
     }
      
 //    -----------------------------------------------------------------  Shift Row
-    public String[][] shiftRow(String input[][]){
+    private String[][] shiftRow(String input[][]){
         //Clone Data 
                 String[][] result = input.clone();
                 for (int i = 0; i < input.length; i++) {
@@ -335,7 +335,7 @@ public class aesTest {
             return result;  
     }
 //    -----------------------------------------------------------------  Mix Column
-    public String[][] mixColumn(String[][] input){
+    private String[][] mixColumn(String[][] input){
     //Clone Data 
         String[][] clone = input.clone();
         String[][] box = boxMixColumn.clone();
@@ -374,7 +374,7 @@ public class aesTest {
     
     
     // Cột nhân dòng  GF(2^8)
-    public String mix_1Result (String[] temp, String[] boxMix){
+    private String mix_1Result (String[] temp, String[] boxMix){
         String[] resultTemp = new String[4];
         
         for (int i = 0; i < 4; i++) {
@@ -401,7 +401,7 @@ public class aesTest {
     }
    
     // Xử lý nhân 2
-    public String nhan2(String hexString) {
+    private String nhan2(String hexString) {
         int input = (Integer.parseInt(hexString, 16));
         int length = input;
         int shiftedLeft = length << 1;
@@ -412,7 +412,7 @@ public class aesTest {
         return String.format("%02x", shiftedLeft);
     }
     // Xử lý nhân 3
-    public String nhan3(String hexString){
+    private String nhan3(String hexString){
         int input = (Integer.parseInt(hexString, 16));
 
         int nhan2_output = (Integer.parseInt(nhan2(hexString), 16));
@@ -422,9 +422,53 @@ public class aesTest {
         return String.format("%02x", shiftedLeft);
     }
     
+    
+    
+    private String[][] mixColumns(String[][] input) {
+        int[][] state = new int[4][4];
+        
+         for (int i = 0; i < 4; i++) {
+             for (int j = 0; j < 4; j++) {
+                 state[i][j] = Integer.parseInt(input[i][j], 16); 
+             }
+         }
+        
+        
+        int temp0, temp1, temp2, temp3;
+        for (int c = 0; c < 4; c++) {
+
+            temp0 = mult(0x02, state[0][c]) ^ mult(0x03, state[1][c]) ^ state[2][c] ^ state[3][c];
+            temp1 = state[0][c] ^ mult(0x02, state[1][c]) ^ mult(0x03, state[2][c]) ^ state[3][c];
+            temp2 = state[0][c] ^ state[1][c] ^ mult(0x02, state[2][c]) ^ mult(0x03, state[3][c]);
+            temp3 = mult(0x03, state[0][c]) ^ state[1][c] ^ state[2][c] ^ mult(0x02, state[3][c]);
+
+            state[0][c] = temp0;
+            state[1][c] = temp1;
+            state[2][c] = temp2;
+            state[3][c] = temp3;
+        }
+
+        String[][] resultString = new String[4][4];
+        
+        for (int i = 0; i < 4; i++) {
+             for (int j = 0; j < 4; j++) {
+                 resultString[i][j] =  Integer.toHexString(state[i][j]); 
+             }
+         }
+        
+        return resultString;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
 //    -----------------------------------------------------------------   Substitution Bytes (S-Box)
     
-    public String[][] substitutionBytes(String[][] input){
+    private String[][] substitutionBytes(String[][] input){
         //Clone Data 
         String[][] clone = input.clone();
         for (int i = 0; i < input.length; i++) {
@@ -441,7 +485,7 @@ public class aesTest {
         return result;
     }
        
-    public String checkSBox(String input){
+    private String checkSBox(String input){
         int x = Integer.parseInt(String.valueOf(input.charAt(0)), 16);
         int y = Integer.parseInt(String.valueOf(input.charAt(1)), 16);
         
@@ -451,7 +495,7 @@ public class aesTest {
     
 //    -----------------------------------------------------------------   Add roundkey
     
-    public String[][] addRoundKey (String[][] input, String[][] key){
+    private String[][] addRoundKey (String[][] input, String[][] key){
     // Clone Data
         String[][] cloneInput = input.clone();
         String[][] cloneKey = key.clone();
@@ -471,7 +515,7 @@ public class aesTest {
         return result;
     }
     
-    public String xorHexHex(String a, String b){
+    private String xorHexHex(String a, String b){
         int n1 = Integer.parseInt(a, 16);
         int n2 = Integer.parseInt(b, 16);
         int n3 = n1 ^ n2;
@@ -479,9 +523,17 @@ public class aesTest {
     }
 //    -----------------------------------------------------------------   Input to Hex   
     
-    public String[][] inputToHex(String input){
+    private String[][] inputToHex(String input){
         String[][] result = new String[4][4];
         int temp = 0;
+//        Thêm chuỗi đủ 16 ký tự
+        for (int i = input.length(); i < 16; i++) {
+            input = input.concat(" ");
+            System.out.println(input);
+        }
+        
+        
+        //Xuất chuỗi sang hex
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
 //                System.out.println(input.charAt(temp));
@@ -493,7 +545,7 @@ public class aesTest {
         return result;
     }
     
-        public String[][] inputToHex2(String input){
+        private String[][] inputToHex2(String input){
         String[][] result = new String[4][4];
         int temp = 0;
         for (int i = 0; i < 4; i++) {
@@ -505,15 +557,15 @@ public class aesTest {
     }
     
 //    -----------------------------------------------------------------   Xử lý khác
-    public String hexToBin(String s) {
+    private String hexToBin(String s) {
               return new BigInteger(s, 16).toString(2);
     }
     
-    public String textToHex (String input){
-        return String.format("%2X", new BigInteger(1, input.getBytes()));
+    private String textToHex (String input){
+        return String.format("%02X", new BigInteger(1, input.getBytes()));
     }
 
-    public byte[][] changeInputToByte(String input[][]){
+    private byte[][] changeInputToByte(String input[][]){
         //Clone Data 
         String[][] clone = input.clone();
         for (int i = 0; i < input.length; i++) {
@@ -535,7 +587,7 @@ public class aesTest {
     
     }
     
-    public void showResult3 (String[][][] input){
+    private void showResult3 (String[][][] input){
             for (int i = 0; i < 11; i++) {
                 for (int j = 0; j < 4; j++) {
                     for (int k = 0; k < 4; k++) {
@@ -548,7 +600,7 @@ public class aesTest {
             }
     }
     
-    public void showResult2 (String[][] input){
+    private void showResult2 (String[][] input){
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
                     System.out.print(input[i][j]+ " ");
@@ -557,14 +609,14 @@ public class aesTest {
             }
     }
     
-    public void showResult1 (String[] input){
+    private void showResult1 (String[] input){
             for (int i = 0; i < 4; i++) {
                     System.out.print(input[i]+ " ");
                 System.out.println("");
             }
     }
     
-     public void showResult (String input){
+     private void showResult (String input){
             for (int i = 0; i < 16; i++) {
                     System.out.print(input+ " ");
             }
@@ -579,7 +631,9 @@ public class aesTest {
                 roundKey(this.key);
         String result ="";
         String[][] first = addRoundKey(temp, getRoundKey(10));
+        
         String[][] resultTemp = new String[4][4];
+        
         resultTemp = first;
         
 //         System.out.println("---Add Round 10 ---");
@@ -611,7 +665,7 @@ public class aesTest {
 //        resultTemp = addRoundKey(resultTemp, getRoundKey(0));
 //                System.out.println("---INV ADD ROUND " + 0 + "---");
 //                showResult2(resultTemp);
-//                
+                
 
         // 9 8 7 6 5 4 3 2 1 
         for (int i = 9; i > 0 ;i--){
@@ -625,16 +679,12 @@ public class aesTest {
 
         }
         
+        
+        //Bước cuối 
         resultTemp = invShiftRow(resultTemp);
-
         resultTemp = invSubstitutionBytes(resultTemp);
-
         resultTemp = addRoundKey(resultTemp, getRoundKey(0));
-  
-                
-                
-                
-                
+
         for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
                     result += resultTemp[i][j];
@@ -647,14 +697,16 @@ public class aesTest {
         }
         // Chuyển mảng bytes thành văn bản
         String text = new String(byteArray);
-        return text;
+        
+        
+        return text.trim();
      }
      
      
      
      
      
-     public String[][] inputText(String input){
+     private String[][] inputText(String input){
          String[][] result = new String[4][4];
          
          int count = 0;
@@ -671,7 +723,7 @@ public class aesTest {
      
      
 //    -----------------------------------------------------------------   Ivn SubStitution    
-    public String[][] invSubstitutionBytes(String[][] input){
+    private String[][] invSubstitutionBytes(String[][] input){
         //Clone Data 
         String[][] clone = input.clone();
         for (int i = 0; i < input.length; i++) {
@@ -688,14 +740,14 @@ public class aesTest {
         return result;
     }
     
-        public String invCheckSBox(String input){
+        private String invCheckSBox(String input){
             int x = Integer.parseInt(String.valueOf(input.charAt(0)), 16);
             int y = Integer.parseInt(String.valueOf(input.charAt(1)), 16);
         return invSBox[x][y].toUpperCase();
     }
         
 //    ----------------------------------------------------------------- Inv Shift Row
-    public String[][] invShiftRow(String input[][]){
+    private String[][] invShiftRow(String input[][]){
         //Clone Data 
                 String[][] result = input.clone();
                 for (int i = 0; i < input.length; i++) {
@@ -720,7 +772,7 @@ public class aesTest {
             return result;  
     }
 //    ----------------------------------------------------------------- Inv Mix Column
-    public String[][] invMixColumn(String[][] input){
+    private String[][] invMixColumn(String[][] input){
     //Clone Data 
         String[][] clone = input.clone();
         String[][] box = invBoxMixColumn.clone();
@@ -757,7 +809,7 @@ public class aesTest {
     }
     
     
-        public String invMix1Result (String[] temp, String[] boxMix){
+        private String invMix1Result (String[] temp, String[] boxMix){
         String[] resultTemp = new String[4];
         
         for (int i = 0; i < 4; i++) {
@@ -788,7 +840,7 @@ public class aesTest {
         
     }
     
-        public String nhan9(String hexString){
+        private String nhan9(String hexString){
             int value = (Integer.parseInt(hexString, 16));
             int input = (value << 3) ^ value;
             if (input > (256<<2)) input = input ^ (0x11b << 2);
@@ -799,7 +851,7 @@ public class aesTest {
             return String.format("%02X", input).toUpperCase();
         }
         
-        public String nhanB(String hexString){
+        private String nhanB(String hexString){
             int value = (Integer.parseInt(hexString, 16));
             int input = (value << 3) ^ (value << 1) ^ value;
             if (input > (256<<2)) input = input ^ (0x11b << 2);
@@ -810,7 +862,7 @@ public class aesTest {
             return String.format("%02X", input).toUpperCase();
         }
         
-        public String nhanD(String hexString){
+        private String nhanD(String hexString){
             int value = (Integer.parseInt(hexString, 16));
             int input = (value << 3) ^ (value << 2) ^ value;
             if (input >= (256<<2)) input = input ^ (0x11b << 2);
@@ -821,7 +873,7 @@ public class aesTest {
             return String.format("%02X", input).toUpperCase();
         }
         
-        public String nhanE(String hexString){
+        private String nhanE(String hexString){
             int value = (Integer.parseInt(hexString, 16));
             int input = (value << 3) ^ (value << 2) ^ (value << 1);
             if (input >= (256<<2)) input = input ^ (0x11b << 2);
@@ -832,7 +884,7 @@ public class aesTest {
             return String.format("%02X", input).toUpperCase();
         }
         
-        public String[][] textHexToArray(String input){
+        private String[][] textHexToArray(String input){
             String[] temp = new String[16];
             String[][] result = new String[4][4];
             int flag = 0;
@@ -853,7 +905,7 @@ public class aesTest {
         
         
         
-        public String hexToText(String input){
+        private String hexToText(String input){
             String result = "";
             
             String[] temp = new String[16];
@@ -874,7 +926,7 @@ public class aesTest {
             return result;
         }
         
-    public int multiply (int a, int b){
+    private int multiply (int a, int b){
         int poly = 0b100011011;
         int result = 0;
 
@@ -888,13 +940,13 @@ public class aesTest {
         return result;
     }
 
-    public int gmul (int a, int p){
+    private int gmul (int a, int p){
         a <<= 1;
         if ((a&0x100) == 0x100)
             a ^= p;
         return (a&0xff);
     }
-     public String[][] invMixColumn2 (String[][] input) {
+     private String[][] invMixColumn2 (String[][] input) {
         int[][] afterAddroundKey = new int[4][4];
         
          for (int i = 0; i < 4; i++) {
@@ -923,4 +975,61 @@ public class aesTest {
         
         return resultString;
     }
+     
+     private String[][] invMixColumnas(String[][] input) {
+        int[][] state = new int[4][4];
+        
+         for (int i = 0; i < 4; i++) {
+             for (int j = 0; j < 4; j++) {
+                 state[i][j] = Integer.parseInt(input[i][j], 16); 
+             }
+         }
+         
+         
+        int temp0, temp1, temp2, temp3;
+        for (int c = 0; c < 4; c++) {
+            temp0 = mult(0x0e, state[0][c]) ^ mult(0x0b, state[1][c]) ^ mult(0x0d, state[2][c]) ^ mult(0x09, state[3][c]);
+            temp1 = mult(0x09, state[0][c]) ^ mult(0x0e, state[1][c]) ^ mult(0x0b, state[2][c]) ^ mult(0x0d, state[3][c]);
+            temp2 = mult(0x0d, state[0][c]) ^ mult(0x09, state[1][c]) ^ mult(0x0e, state[2][c]) ^ mult(0x0b, state[3][c]);
+            temp3 = mult(0x0b, state[0][c]) ^ mult(0x0d, state[1][c]) ^ mult(0x09, state[2][c]) ^ mult(0x0e, state[3][c]);
+
+            state[0][c] = temp0;
+            state[1][c] = temp1;
+            state[2][c] = temp2;
+            state[3][c] = temp3;
+        }
+        
+                
+        String[][] resultString = new String[4][4];
+        
+        for (int i = 0; i < 4; i++) {
+             for (int j = 0; j < 4; j++) {
+                 resultString[i][j] =  Integer.toHexString(state[i][j]); 
+             }
+         }
+        
+        return resultString;
+    }
+     
+     private static int mult(int a, int b) {
+        int sum = 0;
+        while (a != 0) { // while it is not 0
+            if ((a & 1) != 0) { // check if the first bit is 1
+                sum = sum ^ b; // add b from the smallest bit
+            }
+            b = xtime(b); // bit shift left mod 0x11b if necessary;
+            a = a >>> 1; // lowest bit of "a" was used so shift right
+        }
+        return sum;
+
+    }
+     
+     private static int xtime(int b) {
+        if ((b & 0x80) == 0) {
+            return b << 1;
+        }
+        return (b << 1) ^ 0x11b;
+    }
+     
+     
 }
