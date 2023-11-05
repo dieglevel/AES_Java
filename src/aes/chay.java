@@ -16,8 +16,8 @@ public class chay {
         String key =  "HDSDOIWHDOIWQDWQ"; 
         String text = "NGUYENTANLOCDEPL";
         
-        String key2 = "ngaythi1105";
-        String text2 ="21046541";
+        String key2 = "ngaythi1_105";
+        String text2 ="210_46541";
         
         String a,b;
         //Khai báo class

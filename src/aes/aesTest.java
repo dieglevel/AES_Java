@@ -5,7 +5,6 @@
 package aes;
 
 import java.math.BigInteger;
-import javax.naming.spi.DirStateFactory;
 
 /**
  *
@@ -87,17 +86,14 @@ public class aesTest {
         System.out.println("");
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                System.out.print(this.text[i][j] + " ");
             }
         }
         System.out.println("");
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                System.out.print(this.key[i][j] + " ");
             }
         }
-        
-        System.out.println("");
+       
         
         
     }
@@ -529,7 +525,6 @@ public class aesTest {
 //        Thêm chuỗi đủ 16 ký tự
         for (int i = input.length(); i < 16; i++) {
             input = input.concat(" ");
-            System.out.println(input);
         }
         
         
@@ -1013,12 +1008,12 @@ public class aesTest {
      
      private static int mult(int a, int b) {
         int sum = 0;
-        while (a != 0) { // while it is not 0
-            if ((a & 1) != 0) { // check if the first bit is 1
-                sum = sum ^ b; // add b from the smallest bit
+        while (a != 0) {
+            if ((a & 1) != 0) { 
+                sum = sum ^ b; 
             }
-            b = xtime(b); // bit shift left mod 0x11b if necessary;
-            a = a >>> 1; // lowest bit of "a" was used so shift right
+            b = xtime(b); 
+            a = a >>> 1;
         }
         return sum;
 

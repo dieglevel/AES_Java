@@ -4,6 +4,10 @@
  */
 package aes;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Admin
@@ -15,6 +19,7 @@ public class UI extends javax.swing.JFrame {
      */
     public UI() {
         initComponents();
+       
     }
 
     /**
@@ -36,19 +41,22 @@ public class UI extends javax.swing.JFrame {
         text = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         key = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        numText = new javax.swing.JLabel();
+        numKey = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        folder = new javax.swing.JTextField();
+        checkBox = new javax.swing.JCheckBox();
         jPanel8 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        buttonMaHoa = new javax.swing.JButton();
+        buttonGiaiMa = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         cipher = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1098, 285));
-        setMinimumSize(new java.awt.Dimension(1098, 285));
-        setPreferredSize(new java.awt.Dimension(1098, 285));
+        setMaximumSize(new java.awt.Dimension(1201, 496));
+        setMinimumSize(new java.awt.Dimension(1201, 496));
+        setPreferredSize(new java.awt.Dimension(1201, 496));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setLayout(new java.awt.BorderLayout());
@@ -66,14 +74,17 @@ public class UI extends javax.swing.JFrame {
 
         java.awt.GridBagLayout jPanel6Layout = new java.awt.GridBagLayout();
         jPanel6Layout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
-        jPanel6Layout.rowHeights = new int[] {0, 5, 0, 5, 0};
+        jPanel6Layout.rowHeights = new int[] {0, 5, 0, 5, 0, 5, 0};
         jPanel6Layout.columnWeights = new double[] {10.0};
         jPanel6Layout.rowWeights = new double[] {5.0};
         jPanel6.setLayout(jPanel6Layout);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 1, 36)); // NOI18N
-        jLabel2.setText("Text:");
-        jPanel6.add(jLabel2, new java.awt.GridBagConstraints());
+        jLabel2.setText("Text/Cipher:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        jPanel6.add(jLabel2, gridBagConstraints);
 
         text.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         text.setMaximumSize(new java.awt.Dimension(800, 40));
@@ -92,14 +103,13 @@ public class UI extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 9;
         jPanel6.add(text, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 1, 36)); // NOI18N
         jLabel3.setText("Key:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 2;
         jPanel6.add(jLabel3, gridBagConstraints);
 
         key.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -118,56 +128,96 @@ public class UI extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 2;
         jPanel6.add(key, gridBagConstraints);
 
-        jLabel5.setText("...");
-        jPanel6.add(jLabel5, new java.awt.GridBagConstraints());
-
-        jLabel6.setText("...");
+        numText.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        jPanel6.add(numText, gridBagConstraints);
+
+        numKey.setText("...");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        jPanel6.add(numKey, gridBagConstraints);
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI Black", 1, 36)); // NOI18N
+        jLabel7.setText("Folder:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        jPanel6.add(jLabel6, gridBagConstraints);
+        jPanel6.add(jLabel7, gridBagConstraints);
+
+        folder.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        folder.setMaximumSize(new java.awt.Dimension(800, 40));
+        folder.setMinimumSize(new java.awt.Dimension(800, 40));
+        folder.setPreferredSize(new java.awt.Dimension(800, 40));
+        folder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                folderActionPerformed(evt);
+            }
+        });
+        folder.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                folderkeyTextType(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        jPanel6.add(folder, gridBagConstraints);
+
+        checkBox.setText("Mã hóa phách");
+        checkBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkBoxActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        jPanel6.add(checkBox, gridBagConstraints);
 
         jPanel3.add(jPanel6);
 
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jButton1.setText("Mã hóa");
-        jButton1.setMaximumSize(new java.awt.Dimension(150, 50));
-        jButton1.setMinimumSize(new java.awt.Dimension(150, 50));
-        jButton1.setPreferredSize(new java.awt.Dimension(150, 50));
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        buttonMaHoa.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        buttonMaHoa.setText("Mã hóa");
+        buttonMaHoa.setMaximumSize(new java.awt.Dimension(150, 50));
+        buttonMaHoa.setMinimumSize(new java.awt.Dimension(150, 50));
+        buttonMaHoa.setPreferredSize(new java.awt.Dimension(150, 50));
+        buttonMaHoa.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 maHoa(evt);
             }
         });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        buttonMaHoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                buttonMaHoaActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.ABOVE_BASELINE;
-        jPanel8.add(jButton1, gridBagConstraints);
+        jPanel8.add(buttonMaHoa, gridBagConstraints);
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jButton2.setText("Giải mã");
-        jButton2.setMaximumSize(new java.awt.Dimension(150, 50));
-        jButton2.setMinimumSize(new java.awt.Dimension(150, 50));
-        jButton2.setPreferredSize(new java.awt.Dimension(150, 50));
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+        buttonGiaiMa.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        buttonGiaiMa.setText("Giải mã");
+        buttonGiaiMa.setMaximumSize(new java.awt.Dimension(150, 50));
+        buttonGiaiMa.setMinimumSize(new java.awt.Dimension(150, 50));
+        buttonGiaiMa.setPreferredSize(new java.awt.Dimension(150, 50));
+        buttonGiaiMa.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 giaiMa(evt);
             }
         });
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        buttonGiaiMa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                buttonGiaiMaActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -175,7 +225,7 @@ public class UI extends javax.swing.JFrame {
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.ABOVE_BASELINE;
         gridBagConstraints.insets = new java.awt.Insets(0, 26, 0, 26);
-        jPanel8.add(jButton2, gridBagConstraints);
+        jPanel8.add(buttonGiaiMa, gridBagConstraints);
 
         jPanel3.add(jPanel8);
 
@@ -212,19 +262,38 @@ public class UI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_keyActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void buttonMaHoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonMaHoaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_buttonMaHoaActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void buttonGiaiMaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGiaiMaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_buttonGiaiMaActionPerformed
 
     private void maHoa(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_maHoa
+        
+        
+        if (checkBox.isSelected()){
+            List<File> docxFiles = getDocxFiles(folder.getText());
+            showFile(docxFiles);
+            if (docxFiles != null){
+                for (File docxFile : docxFiles) {
+                    aes = new aesTest(docxFile.getName().substring(0, docxFile.getName().length()-5), key.getText());
+                    String temp = aes.maHoa();
+                    renameFileWithoutChangingExtension(docxFile, temp);
+                }
+            }
+            else{
+                cipher.setText("Khong tim thay thu muc");
+            }
+            cipher.setText("DONE");
+            return;
+        }
         aes = new aesTest(text.getText(), key.getText());
         cipher.setText(aes.maHoa());
-        
         text.setText("");
+        return;
+        
     }//GEN-LAST:event_maHoa
 
     private void cipherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cipherActionPerformed
@@ -233,7 +302,23 @@ public class UI extends javax.swing.JFrame {
 
     private void giaiMa(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_giaiMa
         // TODO add your handling code here:
-       
+        
+        if (checkBox.isSelected()){
+            List<File> docxFiles = getDocxFiles(folder.getText());
+            showFile(docxFiles);
+                if (docxFiles != null){
+                    for (File docxFile : docxFiles) {
+                        aes = new aesTest(docxFile.getName(), key.getText());
+                        String temp = aes.giaiMa(docxFile.getName(), key.getText());
+                        renameFileWithoutChangingExtension(docxFile, temp);
+                    }
+                }
+                else{
+                    cipher.setText("Khong tim thay thu muc");
+                }
+            cipher.setText("DONE");
+            return;
+        }
         cipher.setText(aes.giaiMa(text.getText(), key.getText()));
     }//GEN-LAST:event_giaiMa
 
@@ -242,12 +327,24 @@ public class UI extends javax.swing.JFrame {
     }//GEN-LAST:event_textActionPerformed
 
     private void keyTextType(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_keyTextType
-        jLabel5.setText(String.valueOf(text.getText().length()+1));
+        numText.setText(String.valueOf(text.getText().length()+1));
     }//GEN-LAST:event_keyTextType
 
     private void keykeyText(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_keykeyText
-        jLabel6.setText(String.valueOf(key.getText().length()+1));
+        numKey.setText(String.valueOf(key.getText().length()+1));
     }//GEN-LAST:event_keykeyText
+
+    private void folderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_folderActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_folderActionPerformed
+
+    private void folderkeyTextType(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_folderkeyTextType
+        // TODO add your handling code here:
+    }//GEN-LAST:event_folderkeyTextType
+
+    private void checkBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_checkBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -283,17 +380,86 @@ public class UI extends javax.swing.JFrame {
             }
         });
     }
+    
+    
+    
+    public List<File> getDocxFiles(String directoryPath) {
+        List<File> docxFiles = new ArrayList<>();
+
+        File directory = new File(directoryPath);
+
+        // Kiểm tra xem thư mục tồn tại
+        if (directory.exists() && directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile() && file.getName().toLowerCase().endsWith(".docx")) {
+                        docxFiles.add(file);
+                    }
+                }
+            }
+        } else {
+            System.err.println("Thư mục không tồn tại hoặc không phải là thư mục.");
+            return null;
+        }
+
+        return docxFiles;
+    }
+    
+    public void showFile(List<File> docxFiles){
+        for (File file : docxFiles) {
+            System.out.println(file.getName());
+        }
+    }
+    
+//    public boolean renameFile(File oldFile, String newFileName) {
+//        
+//        File newFile = new File(newFileName);
+//        
+//        System.out.println("aes.UI.renameFile()"+ newFileName);
+//        
+//        System.out.println("aes.UI.renameFile()"+ oldFile.getName());
+//
+//        if (oldFile.exists() && !newFile.exists()) {
+//            return oldFile.renameTo(newFile);
+//        } else {
+//            return false;
+//        }
+//    }
+    
+    public boolean renameFileWithoutChangingExtension(File file, String newFileName) {
+        String parentDirectory = file.getParent();
+        String newFilePath = parentDirectory + File.separator + newFileName+ ".docx";
+        File newFile = new File(newFilePath);
+        
+        System.out.println("aes.UI.renameFile()"+ newFileName);
+
+        if (!newFile.exists()) {
+            System.out.println("aes.UI.renameFile()" + file.getName());
+            return file.renameTo(newFile);
+           
+        } else {
+            return false;
+        }
+    }
+    
+    
+    
+    
+    
+    // Khai báo
     aesTest aes = new aesTest();
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buttonGiaiMa;
+    private javax.swing.JButton buttonMaHoa;
+    private javax.swing.JCheckBox checkBox;
     private javax.swing.JTextField cipher;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JTextField folder;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -301,6 +467,8 @@ public class UI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JTextField key;
+    private javax.swing.JLabel numKey;
+    private javax.swing.JLabel numText;
     private javax.swing.JTextField text;
     // End of variables declaration//GEN-END:variables
 }
